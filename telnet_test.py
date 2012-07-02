@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 
 import telnetlib
-import sys
 
 HOST = "192.168.1.75"
 PORT = "3436"
@@ -128,10 +127,10 @@ def imprimirDanfe(arquivoXml):
     response = tn.read_all()
     
     if response.find("OK: ") != -1:
-        print 'DANFE para impressão: OK'
+        print 'Impressão da DANFE: OK'
         tn.close()
     else:
-        print 'DANFE para impressão: ERRO'
+        print 'Impressão da DANFE: ERRO'
         tn.close()
 
 def main():
