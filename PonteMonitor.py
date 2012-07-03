@@ -19,6 +19,8 @@ class PonteMonitor(object):
     
     HOST = "192.168.1.75"
     PORT = "3436"
+    arquivoXml = None
+    X = "c:\\temp\\nfe_132.txt"
     tn = None
 
 
@@ -26,26 +28,53 @@ class PonteMonitor(object):
         '''
         Constructor
         '''
+        self.tn = telnetlib.Telnet(self.HOST, self.PORT)
     
     # @todo: testar se conectou    
     def conectarMonitor(self):
         self.tn = telnetlib.Telnet(self.HOST, self.PORT)
     
-    def fecharConexaoMonitor(self):
+    def commit(self):
         self.tn.write('exit\n')
         self.tn.write('.\n')
-        self.tn.close()
+        return self.tn.read_all()
         
     def statusServico(self):
         self.tn.write('nfe.statusServico()\n')
         self.tn.write('.\n')
-        print self.tn.read_all()
+        if self.commit().find('OK: ') != -1:
+            return True
+        else:
+            return False
+        
+    def criarNfeSefaz(self, arquivoTxt):
+        self.tn.write('nfe.criarNfeSefaz(' + arquivoTxt + ', 1)\n')
+        self.tn.write('.\n')
+        
+        if self.commit().find("OK: ") != -1:
+            # encontra arquivo XML na string
+            # -3 porque ele pega algum lixo no caminho
+            self.arquivoXml = self.commit().find('C:\\')
+            self.arquivoXml = self.commit()[self.arquivoXml:(len(self.commit())-3)]
+            return True
+        else:
+            return False 
+        
+        
         
 # teste
 def main():
     pm = PonteMonitor()
     pm.conectarMonitor()
-    pm.statusServico()
+    if pm.statusServico():
+        print 'Status do Serviço: OK'
+    else:
+        print 'Status do Serviço: ERRO'
+    pm.conectarMonitor()
+    if pm.criarNfeSefaz():
+        print 'Criação do arquivo XML: OK'
+    else:
+        print 'Criação do arquivo XML: ERRO'
     
     
 
