@@ -15,16 +15,49 @@ from PonteMonitor import PonteMonitor
 
 def main():
     
-    # config
-    PATH = "/Users/joao/Downloads/"
+    # config producao ->
+    '''PATH = "/Users/joao/Downloads/nfe/"
     
     pa = PonteArquivos(PATH)
     pm = PonteMonitor()
-
+    
     files = pa.processaNovosArquivos()
     print files
     for file in files:
-        print pm.criarNfeSefaz(PATH + file)
+        print pm.criarNfeSefaz(PATH + file) '''
+
+    
+    # config teste ->
+    PATH_tmp = "/Users/joao/Downloads/nfe/"
+    PATH = "c:\\temp\\nfe_132.txt"
+    
+    pa = PonteArquivos(PATH_tmp)
+    pm = PonteMonitor('192.168.1.75', '3436')
+    
+    if pm.criarNfeSefaz(PATH):
+        print 'Criação do XML: OK'
+        pm.conectarMonitor()
+        if pm.validarNfe():
+            print 'Validação do XML: OK'
+            pm.conectarMonitor()
+            if pm.enviarNfe():
+                print 'Envio do XML: OK'
+                pm.conectarMonitor()
+                if pm.enviarEmail('joao@fortunata.com.br'):
+                    print 'Envio do e-mail ao cliente: OK'
+                    pm.conectarMonitor()
+                    if pm.imprimirDanfe():
+                        print 'Impressão da DANFE: OK'
+                    else:
+                        print 'Impressão da DANFE: ERRO'
+                else:
+                    print 'Envio do e-mail ao cliente: ERRO'
+            else:
+                print 'Envido do XML: ERRO'
+        else:
+            print 'Validação do XML: ERRO'
+    else:
+        print 'Criação do XML: ERRO'
     
     
     

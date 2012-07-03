@@ -26,16 +26,15 @@ class PonteArquivos(object):
         '''
         self.sourceFolder = source
         os.chdir(self.sourceFolder)
-        
-    
+ 
     def processaNovosArquivos(self):
-        return glob.glob('nfe_111.txt')
+        return glob.glob('nfe_132.txt')
 
 
 # teste
 def main():
     
-    PATH = "/Users/joao/Downloads/"
+    PATH = "/Users/joao/Downloads/nfe"
     pa = PonteArquivos(PATH)
     files = pa.processaNovosArquivos()
     
